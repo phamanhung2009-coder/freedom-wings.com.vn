@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700;800&family=Teko:wght@600;700&family=Rajdhani:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&display=swap');
 
         body {
             font-family: 'Rajdhani', sans-serif;
@@ -16,8 +16,14 @@
             overflow-x: hidden;
         }
 
-        .font-stat { font-family: 'Teko', sans-serif; letter-spacing: 1px; }
-        .font-heading { font-family: 'Chakra Petch', sans-serif; }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.3), inset 0 0 15px rgba(57, 255, 20, 0.1);
+            border: 1px solid #39ff14;
+        }
 
         .neon-text-green {
             color: #39ff14;
@@ -34,347 +40,387 @@
             background-color: #081208;
         }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050a05; }
-        ::-webkit-scrollbar-thumb { background: #1a4a1a; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #39ff14; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050a05;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a4a1a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #39ff14;
+        }
 
         @keyframes neonPulse {
             0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 5px #39ff14); }
             50% { opacity: 1; filter: drop-shadow(0 0 15px #39ff14); }
         }
 
-        .animate-neon { animation: neonPulse 2.5s infinite ease-in-out; }
+        .animate-neon {
+            animation: neonPulse 2.5s infinite ease-in-out;
+        }
+
+        .low-perf * {
+            animation: none !important;
+            transition: none !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- HEADER / NAVIGATION -->
+    <!-- NAVBAR HEADER -->
     <header class="sticky top-0 z-50 bg-black/90 border-b border-green-900/50 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-            <!-- Logo -->
+            <!-- Logo Brand -->
             <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
                 <div class="w-12 h-12 rounded-lg bg-black border border-green-500/50 flex items-center justify-center animate-neon relative">
                     <i data-lucide="shield" class="w-8 h-8 text-green-400"></i>
                     <i data-lucide="zap" class="w-4 h-4 text-green-300 absolute"></i>
                 </div>
                 <div>
-                    <h1 class="font-heading font-extrabold text-lg leading-none neon-text-green tracking-wider">FREEDOM WINGS</h1>
+                    <h1 class="font-orbitron font-extrabold text-lg leading-none neon-text-green tracking-wider">FREEDOM WINGS II</h1>
                     <span class="text-xs font-semibold text-green-600 tracking-widest uppercase">Clan Delta Force</span>
                 </div>
             </div>
 
-            <!-- Nav Items -->
-            <nav class="hidden md:flex space-x-1 font-heading text-sm">
+            <!-- Main Nav Tabs -->
+            <nav class="hidden md:flex space-x-1 font-orbitron text-sm">
                 <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-md transition text-green-400 border-b-2 border-green-500 font-bold bg-green-950/30">1. TRANG CHỦ</button>
                 <button onclick="switchTab('register')" id="nav-register" class="nav-btn px-4 py-2 rounded-md transition text-gray-400 hover:text-green-400">2. ĐĂNG KÝ</button>
                 <button onclick="switchTab('services')" id="nav-services" class="nav-btn px-4 py-2 rounded-md transition text-gray-400 hover:text-green-400">3. DỊCH VỤ</button>
-                <button onclick="switchTab('chat')" id="nav-chat" class="nav-btn px-4 py-2 rounded-md transition text-gray-400 hover:text-green-400 relative">
-                    4. NHẮN TIN
+                <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn px-4 py-2 rounded-md transition text-gray-400 hover:text-green-400">4. HỒ SƠ</button>
+                <button onclick="switchTab('mailbox')" id="nav-mailbox" class="nav-btn px-4 py-2 rounded-md transition text-gray-400 hover:text-green-400 relative">
+                    5. HÒM THƯ
+                    <span id="unread-badge" class="hidden absolute -top-1 -right-1 bg-green-500 text-black text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
                 </button>
-                <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn px-4 py-2 rounded-md transition text-gray-400 hover:text-green-400">5. HỒ SƠ</button>
             </nav>
 
-            <!-- User Info -->
-            <div class="flex items-center space-x-3">
-                <div class="flex items-center space-x-2 border border-green-900/60 p-1.5 rounded-lg bg-black/60 cursor-pointer" onclick="switchTab('profile')">
-                    <img id="user-avatar-header" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=100&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full border border-green-500 object-cover">
-                    <div class="text-left">
-                        <div id="user-name-header" class="text-xs font-bold text-green-400 leading-none">HODODI</div>
-                        <div id="user-role-header" class="text-[10px] text-green-600 font-mono">OWNER</div>
+            <!-- User Info / Auth Controls -->
+            <div class="flex items-center space-x-3" id="auth-controls">
+                <button onclick="togglePerformanceMode()" class="p-2 text-xs bg-gray-900 border border-green-900 text-green-400 rounded hover:bg-green-950/50 transition" title="Bật/Tắt hiệu ứng cho máy yếu">
+                    <i data-lucide="cpu" class="w-4 h-4 inline"></i> <span class="hidden lg:inline">Máy yếu</span>
+                </button>
+
+                <div id="logged-out-view" class="flex space-x-2">
+                    <button onclick="openModal('login-modal')" class="px-3 py-1.5 text-xs font-orbitron bg-green-950 border border-green-500 text-green-400 hover:bg-green-500 hover:text-black rounded transition font-bold">ĐĂNG NHẬP</button>
+                    <button onclick="openModal('register-modal')" class="px-3 py-1.5 text-xs font-orbitron bg-green-500 text-black font-extrabold hover:bg-green-400 rounded transition">ĐĂNG KÝ</button>
+                </div>
+
+                <div id="logged-in-view" class="hidden items-center space-x-3">
+                    <button onclick="switchTab('mailbox')" class="relative p-2 text-green-400 hover:bg-green-950/40 rounded-full">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </button>
+
+                    <div class="flex items-center space-x-2 cursor-pointer border border-green-900/60 p-1.5 rounded-lg bg-black/60 hover:border-green-500" onclick="switchTab('profile')">
+                        <img id="user-avatar-header" src="https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=100&auto=format&fit=crop&q=80" class="w-8 h-8 rounded-full border border-green-500 object-cover" alt="Avatar">
+                        <div class="text-left">
+                            <div id="user-name-header" class="text-xs font-bold text-green-400 leading-none">HODODI</div>
+                            <div id="user-role-header" class="text-[10px] text-green-600 font-mono">OWNER</div>
+                        </div>
                     </div>
+
+                    <button onclick="logout()" class="p-2 text-gray-400 hover:text-red-400 transition" title="Đăng xuất">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- MAIN BODY -->
+    <!-- MAIN CONTENT AREA -->
     <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 space-y-8">
 
         <!-- ================= TAB 1: TRANG CHỦ ================= -->
         <section id="tab-home" class="tab-content space-y-8">
-            <!-- Stats Boxes Reset To 0 -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-cyber-dark p-5 rounded-2xl border border-green-900/60 text-center flex flex-col items-center justify-center space-y-2">
-                    <i data-lucide="users" class="w-7 h-7 text-green-400"></i>
-                    <div class="text-5xl font-stat font-bold text-green-400 leading-none">0</div>
-                    <div class="text-xs text-gray-400 uppercase font-heading font-semibold">TỔNG THÀNH VIÊN</div>
+            <div class="relative rounded-2xl overflow-hidden border border-green-500/40 bg-black h-64 md:h-96 shadow-2xl">
+                <div id="banner-slide" class="w-full h-full bg-cover bg-center transition-all duration-700 flex items-end p-6 md:p-10" style="background-image: linear-gradient(to top, rgba(5,10,5,0.95), transparent), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&auto=format&fit=crop&q=80')">
+                    <div class="space-y-2 max-w-2xl">
+                        <span id="banner-tag" class="px-3 py-1 bg-green-500 text-black text-xs font-bold font-orbitron rounded-full">CLAN HOT SPOT</span>
+                        <h2 id="banner-title" class="text-2xl md:text-4xl font-extrabold font-orbitron text-white neon-text-green">FREEDOM WINGS II — CHIẾN TRƯỜNG DELTA FORCE</h2>
+                        <p id="banner-desc" class="text-sm md:text-base text-gray-300 line-clamp-2">Gia nhập cộng đồng Esports Delta Force top đầu Việt Nam. Nơi hội tụ các tay súng đẳng cấp và chuyên nghiệp.</p>
+                    </div>
                 </div>
-                <div class="bg-cyber-dark p-5 rounded-2xl border border-green-900/60 text-center flex flex-col items-center justify-center space-y-2">
-                    <i data-lucide="crosshair" class="w-7 h-7 text-green-400"></i>
-                    <div class="text-5xl font-stat font-bold text-green-400 leading-none">0</div>
-                    <div class="text-xs text-gray-400 uppercase font-heading font-semibold">TUYỂN THỦ ACTIVE</div>
-                </div>
-                <div class="bg-cyber-dark p-5 rounded-2xl border border-green-900/60 text-center flex flex-col items-center justify-center space-y-2">
-                    <i data-lucide="store" class="w-7 h-7 text-green-400"></i>
-                    <div class="text-5xl font-stat font-bold text-green-400 leading-none">0</div>
-                    <div class="text-xs text-gray-400 uppercase font-heading font-semibold">DỊCH VỤ MỞ</div>
-                </div>
-                <div class="bg-cyber-dark p-5 rounded-2xl border border-green-900/60 text-center flex flex-col items-center justify-center space-y-2">
-                    <i data-lucide="trophy" class="w-7 h-7 text-green-400"></i>
-                    <div class="text-5xl font-stat font-bold text-green-400 leading-none">0</div>
-                    <div class="text-xs text-gray-400 uppercase font-heading font-semibold">SỰ KIỆN TỔ CHỨC</div>
-                </div>
+                <button onclick="prevBanner()" class="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/70 border border-green-500/50 text-green-400 rounded-full hover:bg-green-500 hover:text-black transition"><i data-lucide="chevron-left"></i></button>
+                <button onclick="nextBanner()" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/70 border border-green-500/50 text-green-400 rounded-full hover:bg-green-500 hover:text-black transition"><i data-lucide="chevron-right"></i></button>
             </div>
 
-            <!-- FULL ANNOUNCEMENTS & LIKE SYSTEM SECTION -->
-            <div class="space-y-4 border-t border-green-900/60 pt-6">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-xl font-heading font-bold text-white flex items-center gap-2">
-                        <i data-lucide="megaphone" class="w-6 h-6 text-green-400"></i> BẢNG THÔNG BÁO CLAN
+            <div class="bg-cyber-card p-6 rounded-xl border border-green-900/60 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="space-y-2">
+                    <h3 class="text-xl font-bold font-orbitron text-green-400 flex items-center gap-2">
+                        <i data-lucide="award" class="w-5 h-5"></i> THƯ CHÀO MỪNG & QUY TẮC BẮT BUỘC
                     </h3>
-                    <span class="text-xs text-green-500 font-mono font-bold uppercase">HIỂN THỊ TẤT CẢ NỘI DUNG</span>
+                    <p class="text-sm text-gray-300">Tất cả thành viên mới sau khi được duyệt hồ sơ phải thực hiện đổi tên ingame theo đúng cú pháp: <span class="text-green-400 font-mono font-bold">FW・Tên</span> hoặc <span class="text-green-400 font-mono font-bold">FW・Tên・T</span> (Dành cho Tuyển Thủ).</p>
                 </div>
-
-                <!-- Announcements Feed -->
-                <div id="full-announcements-container" class="space-y-6"></div>
-            </div>
-        </section>
-
-        <!-- ================= TAB 4: NHẮN TIN TRỰC TUYẾN ================= -->
-        <section id="tab-chat" class="tab-content hidden space-y-6">
-            <div class="flex items-center justify-between border-b border-green-900/60 pb-4">
-                <div>
-                    <h2 class="text-2xl font-extrabold font-heading text-green-400 flex items-center gap-2">
-                        <i data-lucide="messages-square" class="w-7 h-7"></i> HỆ THỐNG NHẮN TIN T THÀNH VIÊN
-                    </h2>
-                    <p class="text-xs text-gray-400">Trò chuyện riêng trực tiếp 1-1 giữa các thành viên và ban quản trị Clan.</p>
-                </div>
+                <button onclick="openModal('rules-modal')" class="px-5 py-2.5 bg-green-950 border border-green-500 text-green-400 font-orbitron font-bold text-xs rounded-lg hover:bg-green-500 hover:text-black transition">XEM QUY TẮC CLAN</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 h-[550px] bg-cyber-dark border border-green-900/60 rounded-2xl overflow-hidden">
-                <!-- User Contacts Sidebar -->
-                <div class="border-r border-green-900/60 p-4 flex flex-col justify-between bg-black/40">
-                    <div class="space-y-3">
-                        <h3 class="text-xs font-bold font-heading text-green-400 tracking-wider uppercase">DANH SÁCH THÀNH VIÊN</h3>
-                        <div id="chat-users-list" class="space-y-2 overflow-y-auto max-h-[420px] pr-1"></div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900/40 text-center">
+                    <div class="text-3xl font-orbitron font-extrabold text-green-400" id="stat-members">142</div>
+                    <div class="text-xs text-gray-400 mt-1 uppercase font-mono">Thành viên Clan</div>
+                </div>
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900/40 text-center">
+                    <div class="text-3xl font-orbitron font-extrabold text-green-400" id="stat-players">24</div>
+                    <div class="text-xs text-gray-400 mt-1 uppercase font-mono">Tuyển thủ chính thức</div>
+                </div>
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900/40 text-center">
+                    <div class="text-3xl font-orbitron font-extrabold text-green-400" id="stat-services">6</div>
+                    <div class="text-xs text-gray-400 mt-1 uppercase font-mono">Dịch vụ hoạt động</div>
+                </div>
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900/40 text-center">
+                    <div class="text-3xl font-orbitron font-extrabold text-green-400" id="stat-events">18</div>
+                    <div class="text-xs text-gray-400 mt-1 uppercase font-mono">Sự kiện đã tổ chức</div>
+                </div>
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900/40 text-center col-span-2 md:col-span-1">
+                    <div class="text-3xl font-orbitron font-extrabold text-green-400" id="stat-orders">389</div>
+                    <div class="text-xs text-gray-400 mt-1 uppercase font-mono">Đơn hàng hoàn tất</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 space-y-4">
+                    <h3 class="text-lg font-orbitron font-bold text-green-400 flex items-center gap-2">
+                        <i data-lucide="megaphone" class="w-5 h-5"></i> THÔNG BÁO NỔI BẬT
+                    </h3>
+                    <div id="announcements-container" class="space-y-3"></div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-orbitron font-bold text-green-400 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i> DỊCH VỤ NỔI BẬT
+                        </h3>
+                        <button onclick="switchTab('services')" class="text-xs text-green-500 hover:underline font-mono">Xem tất cả -></button>
                     </div>
+                    <div id="featured-services-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
+            </div>
 
-                <!-- Active Chat Box Area -->
-                <div class="md:col-span-3 flex flex-col justify-between p-4 bg-black/60 relative">
-                    <!-- Chat Header -->
-                    <div class="flex items-center space-x-3 border-b border-green-900/60 pb-3">
-                        <img id="chat-target-avatar" src="" class="w-10 h-10 rounded-full border border-green-500 object-cover">
+            <div class="bg-black/80 border border-green-900/60 p-6 rounded-2xl space-y-4">
+                <h3 class="text-center font-orbitron font-extrabold text-green-400 tracking-wider">KÊNH TRUYỀN THÔNG VÀ CỘNG ĐỒNG CHÍNH THỨC</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="https://www.tiktok.com/@freedomwingsii0?_r=1&_t=ZS-9AazdT1ASPt" target="_blank" class="flex items-center space-x-3 p-3 bg-cyber-dark border border-green-900/40 rounded-xl hover:border-green-400 transition">
+                        <div class="p-2 bg-black rounded-lg text-green-400"><i data-lucide="video" class="w-6 h-6"></i></div>
                         <div>
-                            <div id="chat-target-name" class="font-bold text-sm text-green-400 font-heading"></div>
-                            <div id="chat-target-role" class="text-[10px] text-gray-400 font-mono">Trực tuyến</div>
+                            <div class="font-bold text-sm text-white">TikTok Official</div>
+                            <div class="text-[10px] text-gray-400">@freedomwingsii0</div>
                         </div>
+                    </a>
+                    <a href="https://www.facebook.com/share/g/1AHdXaxk2e/?mibextid=wwXIfr" target="_blank" class="flex items-center space-x-3 p-3 bg-cyber-dark border border-green-900/40 rounded-xl hover:border-green-400 transition">
+                        <div class="p-2 bg-black rounded-lg text-blue-400"><i data-lucide="facebook" class="w-6 h-6"></i></div>
+                        <div>
+                            <div class="font-bold text-sm text-white">Nhóm Facebook</div>
+                            <div class="text-[10px] text-gray-400">Freedom Wings Clan</div>
+                        </div>
+                    </a>
+                    <a href="https://discord.gg/7XyGU6gKxF" target="_blank" class="flex items-center space-x-3 p-3 bg-cyber-dark border border-green-900/40 rounded-xl hover:border-green-400 transition">
+                        <div class="p-2 bg-black rounded-lg text-indigo-400"><i data-lucide="message-square" class="w-6 h-6"></i></div>
+                        <div>
+                            <div class="font-bold text-sm text-white">Discord Nhánh 2</div>
+                            <div class="text-[10px] text-gray-400">FREEDOM WINGS II</div>
+                        </div>
+                    </a>
+                    <a href="https://discord.gg/58XRE4XJMG" target="_blank" class="flex items-center space-x-3 p-3 bg-cyber-dark border border-green-900/40 rounded-xl hover:border-green-400 transition">
+                        <div class="p-2 bg-black rounded-lg text-indigo-500"><i data-lucide="message-square" class="w-6 h-6"></i></div>
+                        <div>
+                            <div class="font-bold text-sm text-white">Discord Nhánh 1</div>
+                            <div class="text-[10px] text-gray-400">FREEDOM WINGS</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: ĐĂNG KÝ ================= -->
+        <section id="tab-register" class="tab-content hidden space-y-8">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <h2 class="text-3xl font-extrabold font-orbitron neon-text-green">ĐĂNG KÝ THÀNH VIÊN & TUYỂN THỦ</h2>
+                <p class="text-sm text-gray-400">Hãy chọn hạng mục bạn muốn tham gia trong hệ sinh thái Freedom Wings II Delta Force.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-cyber-dark rounded-2xl border border-green-900/60 overflow-hidden flex flex-col p-6 space-y-4 hover:border-green-400 transition">
+                    <h3 class="text-xl font-bold font-orbitron text-green-400">1. THÀNH VIÊN CLAN</h3>
+                    <p class="text-xs text-gray-300">Dành cho game thủ leo rank, giao lưu cùng clan.</p>
+                    <button onclick="openForm('clan-member')" class="w-full py-2.5 bg-green-950 border border-green-500 text-green-400 font-orbitron text-xs font-bold rounded-lg hover:bg-green-500 hover:text-black">NỘP HỒ SƠ THÀNH VIÊN</button>
+                </div>
+                <div class="bg-cyber-dark rounded-2xl border border-green-900/60 overflow-hidden flex flex-col p-6 space-y-4 hover:border-green-400 transition">
+                    <h3 class="text-xl font-bold font-orbitron text-green-400">2. TUYỂN THỦ CLAN</h3>
+                    <p class="text-xs text-gray-300">Thi đấu giải chuyên nghiệp các chế độ.</p>
+                    <button onclick="openForm('player')" class="w-full py-2.5 bg-green-500 text-black font-orbitron text-xs font-extrabold rounded-lg hover:bg-green-400">NỘP HỒ SƠ TUYỂN THỦ</button>
+                </div>
+                <div class="bg-cyber-dark rounded-2xl border border-green-900/60 overflow-hidden flex flex-col p-6 space-y-4 hover:border-green-400 transition">
+                    <h3 class="text-xl font-bold font-orbitron text-green-400">3. CREATOR</h3>
+                    <p class="text-xs text-gray-300">Chương trình sáng tạo nội dung Garena.</p>
+                    <a href="https://creator.deltaforce.garena.com" target="_blank" class="w-full text-center py-2.5 bg-gray-900 border border-green-500/50 text-green-400 font-orbitron text-xs font-bold rounded-lg hover:bg-green-500 hover:text-black">ĐĂNG KÝ CREATOR</a>
+                </div>
+            </div>
+
+            <div id="registration-form-area" class="hidden bg-cyber-card p-6 rounded-2xl border border-green-500/50 max-w-2xl mx-auto space-y-4"></div>
+        </section>
+
+        <!-- ================= TAB 3: DỊCH VỤ ================= -->
+        <section id="tab-services" class="tab-content hidden space-y-8">
+            <h2 class="text-2xl font-extrabold font-orbitron neon-text-green">DỊCH VỤ CLAN FREEDOM WINGS II</h2>
+            <div id="all-services-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- ================= TAB 4: HỒ SƠ ================= -->
+        <section id="tab-profile" class="tab-content hidden space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-cyber-dark p-6 rounded-2xl border border-green-900/60 text-center space-y-4">
+                    <img id="profile-avatar" src="" class="w-24 h-24 mx-auto rounded-full border-2 border-green-500 p-1 object-cover">
+                    <div>
+                        <h3 id="profile-display-name" class="text-xl font-bold font-orbitron text-green-400"></h3>
+                        <span id="profile-role-badge" class="px-3 py-0.5 bg-green-950 text-green-400 border border-green-500 text-xs font-mono font-bold rounded-full"></span>
                     </div>
-
-                    <!-- Chat Messages Stream -->
-                    <div id="chat-messages-container" class="flex-grow my-4 space-y-3 overflow-y-auto pr-2 font-mono text-xs"></div>
-
-                    <!-- Chat Input Field -->
-                    <div class="flex items-center space-x-2 pt-2 border-t border-green-900/60">
-                        <input id="chat-input-text" type="text" placeholder="Nhập tin nhắn..." class="flex-grow p-3 bg-black border border-green-900 rounded-xl text-xs text-white focus:border-green-500 outline-none">
-                        <button onclick="sendChatMessage()" class="p-3 bg-green-500 text-black font-bold rounded-xl hover:bg-green-400 transition flex items-center gap-1">
-                            <i data-lucide="send" class="w-4 h-4"></i> <span class="hidden sm:inline text-xs font-heading">GỬI</span>
-                        </button>
+                    <div class="text-xs text-left font-mono space-y-2 border-t border-green-900/60 pt-4">
+                        <div class="flex justify-between"><span class="text-gray-400">Username:</span> <span id="profile-username" class="text-white"></span></div>
+                        <div class="flex justify-between"><span class="text-gray-400">Email:</span> <span id="profile-email" class="text-white"></span></div>
+                        <div class="flex justify-between"><span class="text-gray-400">Mã:</span> <span id="profile-member-code" class="text-green-400 font-bold"></span></div>
+                    </div>
+                    <button onclick="switchTab('admin')" class="w-full py-2.5 bg-green-500 text-black font-orbitron font-extrabold text-xs rounded hover:bg-green-400">TRUNG TÂM QUẢN TRỊ ADMIN</button>
+                </div>
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-cyber-dark p-6 rounded-2xl border border-green-900/60 space-y-4">
+                        <h3 class="text-lg font-orbitron font-bold text-green-400">HỒ SƠ CỦA TÔI</h3>
+                        <div id="my-applications-list" class="space-y-2"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ================= CÁC TAB KHÁC ================= -->
-        <section id="tab-register" class="tab-content hidden"><h2 class="text-2xl font-bold font-heading text-green-400">ĐĂNG KÝ</h2></section>
-        <section id="tab-services" class="tab-content hidden"><h2 class="text-2xl font-bold font-heading text-green-400">DỊCH VỤ</h2></section>
-        <section id="tab-profile" class="tab-content hidden"><h2 class="text-2xl font-bold font-heading text-green-400">HỒ SƠ TÀI KHOẢN</h2></section>
+        <!-- ================= TAB 5: HÒM THƯ ================= -->
+        <section id="tab-mailbox" class="tab-content hidden space-y-8">
+            <h2 class="text-2xl font-extrabold font-orbitron neon-text-green">HÒM THƯ NỘI BỘ</h2>
+            <div id="mail-list-container" class="space-y-3 max-w-3xl"></div>
+        </section>
+
+        <!-- ================= TAB ADMIN ================= -->
+        <section id="tab-admin" class="tab-content hidden space-y-8">
+            <h2 class="text-2xl font-extrabold font-orbitron text-green-400">TRUNG TÂM QUẢN TRỊ ADMIN (HODODI OWNER)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900"><div class="text-xs text-gray-400">Tổng User</div><div id="adm-stat-users" class="text-2xl font-bold font-orbitron text-green-400">1</div></div>
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900"><div class="text-xs text-gray-400">Hồ sơ chờ duyệt</div><div id="adm-stat-pending-apps" class="text-2xl font-bold font-orbitron text-yellow-400">0</div></div>
+                <div class="bg-cyber-dark p-4 rounded-xl border border-green-900"><div class="text-xs text-gray-400">Đơn hàng mới</div><div id="adm-stat-new-orders" class="text-2xl font-bold font-orbitron text-green-400">0</div></div>
+            </div>
+        </section>
 
     </main>
 
-    <!-- CORE JAVASCRIPT LOGIC -->
+    <!-- MODAL POPUPS -->
+    <div id="login-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cyber-dark border border-green-500/60 p-6 rounded-2xl max-w-sm w-full space-y-4">
+            <h3 class="text-lg font-bold font-orbitron text-green-400 text-center">ĐĂNG NHẬP</h3>
+            <input id="login-input-user" type="text" placeholder="Tên đăng nhập hoặc Email" class="w-full p-2 bg-black border border-green-900 text-xs text-white rounded">
+            <input id="login-input-pass" type="password" placeholder="Mật khẩu" class="w-full p-2 bg-black border border-green-900 text-xs text-white rounded">
+            <button onclick="processLogin()" class="w-full py-2 bg-green-500 text-black font-bold font-orbitron text-xs rounded">XÁC NHẬN ĐĂNG NHẬP</button>
+            <button onclick="closeModal('login-modal')" class="w-full text-center text-xs text-gray-500">Đóng</button>
+        </div>
+    </div>
+
     <script>
         const DB = {
-            users: [
-                { username: 'Anhung123', displayName: 'HODODI (Chủ Clan)', role: 'OWNER', avatar: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=200&auto=format&fit=crop&q=80' },
-                { username: 'Tuyenthutap', displayName: 'FW・Dragon・T', role: 'PLAYER', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80' }
+            users: JSON.parse(localStorage.getItem('fw_users')) || [{ username: 'Anhung123', email: 'phamanhung2009@gmail.com', pass: 'anhung24082009@', displayName: 'HODODI', role: 'OWNER', avatar: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=200&auto=format&fit=crop&q=80', code: 'FW-0001', joinDate: '2026-01-10', status: 'ACTIVE' }],
+            currentUser: JSON.parse(localStorage.getItem('fw_current_user')) || null,
+            announcements: JSON.parse(localStorage.getItem('fw_announcements')) || [{ id: 1, title: 'THÔNG BÁO TUYỂN THỦ MÙA 1', content: 'Gia nhập đội hình tuyển thủ Freedom Wings II.', date: '2026-03-20', pinned: true }],
+            services: JSON.parse(localStorage.getItem('fw_services')) || [
+                { id: 'sv1', name: 'Cày két 3x3', category: 'cay-thue', price: 400000, img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=80', desc: 'Dịch vụ mở két 3x3 uy tín.' },
+                { id: 'sv2', name: 'Cày két 3x3 + Skin', category: 'cay-thue', price: 800000, img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&auto=format&fit=crop&q=80', desc: 'Sở hữu két 3x3 kèm skin độc quyền.' },
+                { id: 'sv3', name: 'Cày full phòng ban', category: 'cay-thue', price: 3500000, img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500&auto=format&fit=crop&q=80', desc: 'Hoàn thành nhiệm vụ phòng ban.' },
+                { id: 'sv4', name: 'Kéo lão bản 2 giờ', category: 'keo-lao-ban', price: 150000, img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80', desc: 'Hỗ trợ leo rank 2 tiếng.' },
+                { id: 'sv5', name: 'Kéo lão bản 5 giờ', category: 'keo-lao-ban', price: 400000, img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=80', desc: 'Gói bảo kê leo rank 5 tiếng.' },
+                { id: 'sv6', name: 'Kéo giá rẻ 1 triệu xu', category: 'keo-lao-ban', price: 15000, img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&auto=format&fit=crop&q=80', desc: 'Cày xu giá rẻ cho tân thủ.' }
             ],
-            currentUser: { username: 'Anhung123', displayName: 'HODODI (Chủ Clan)', role: 'OWNER', avatar: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=200&auto=format&fit=crop&q=80' },
-            announcements: JSON.parse(localStorage.getItem('fw_announcements')) || [
-                {
-                    id: 1,
-                    title: 'THÔNG BÁO THI ĐẤU GIẢI DELTA FORCE MÙA 1',
-                    content: 'Freedom Wings II chính thức tuyển chọn danh sách tuyển thủ tham gia thi đấu vòng loại miền Bắc. Mọi thành viên có K/D trên 2.5 vui lòng đăng ký hồ sơ tuyển thủ trong tuần này.',
-                    date: '2026-03-22',
-                    author: 'HODODI (Chủ Clan)',
-                    likes: ['Anhung123']
-                },
-                {
-                    id: 2,
-                    title: 'CẬP NHẬT QUY ĐỊNH ĐỔI TÊN THÀNH VIÊN INGAME',
-                    content: 'Tất cả các thành viên gia nhập Clan Freedom Wings II bắt buộc hoàn thành đổi tên ingame với tiền tố [FW・Tên] trước ngày 30/03 để ban quản trị duyệt danh sách sinh hoạt chính thức.',
-                    date: '2026-03-20',
-                    author: 'HODODI (Chủ Clan)',
-                    likes: []
-                }
-            ],
-            directMessages: JSON.parse(localStorage.getItem('fw_direct_messages')) || [
-                { from: 'Anhung123', to: 'Tuyenthutap', text: 'Chào tuyển thủ, chuẩn bị tối nay leo rank nhé!', time: '19:30' },
-                { from: 'Tuyenthutap', to: 'Anhung123', text: 'Dạ anh HODODI, em sẵn sàng rồi ạ!', time: '19:32' }
-            ],
-            activeChatPartner: 'Tuyenthutap'
+            applications: JSON.parse(localStorage.getItem('fw_apps')) || [],
+            orders: JSON.parse(localStorage.getItem('fw_orders')) || [],
+            mails: JSON.parse(localStorage.getItem('fw_mails')) || [{ id: 'm1', toUser: 'Anhung123', from: 'HỆ THỐNG', title: 'CHÀO MỪNG ĐẾN VỚI FREEDOM WINGS II', content: 'Chúc mừng bạn gia nhập hệ thống quản lý Clan Freedom Wings II.', date: '2026-03-22', read: false }]
         };
 
         function saveDB() {
+            localStorage.setItem('fw_users', JSON.stringify(DB.users));
+            localStorage.setItem('fw_current_user', JSON.stringify(DB.currentUser));
             localStorage.setItem('fw_announcements', JSON.stringify(DB.announcements));
-            localStorage.setItem('fw_direct_messages', JSON.stringify(DB.directMessages));
+            localStorage.setItem('fw_services', JSON.stringify(DB.services));
+            localStorage.setItem('fw_apps', JSON.stringify(DB.applications));
+            localStorage.setItem('fw_orders', JSON.stringify(DB.orders));
+            localStorage.setItem('fw_mails', JSON.stringify(DB.mails));
         }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            if (tabId === 'profile') renderProfilePage();
+        }
 
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-green-400', 'border-b-2', 'border-green-500', 'font-bold', 'bg-green-950/30');
-                btn.classList.add('text-gray-400');
-            });
-
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            if (activeNav) {
-                activeNav.classList.remove('text-gray-400');
-                activeNav.classList.add('text-green-400', 'border-b-2', 'border-green-500', 'font-bold', 'bg-green-950/30');
+        function updateAuthUI() {
+            if (DB.currentUser) {
+                document.getElementById('logged-out-view').classList.add('hidden');
+                document.getElementById('logged-in-view').classList.remove('hidden');
+                document.getElementById('logged-in-view').classList.add('flex');
+                document.getElementById('user-name-header').innerText = DB.currentUser.displayName;
+                document.getElementById('user-role-header').innerText = DB.currentUser.role;
+                document.getElementById('user-avatar-header').src = DB.currentUser.avatar;
+            } else {
+                document.getElementById('logged-out-view').classList.remove('hidden');
+                document.getElementById('logged-in-view').classList.add('hidden');
             }
-
-            if (tabId === 'chat') renderChatTab();
-            if (tabId === 'home') renderFullAnnouncements();
         }
 
-        // RENDER FULL ANNOUNCEMENTS WITH LIKE/TIM
-        function renderFullAnnouncements() {
-            const container = document.getElementById('full-announcements-container');
-            container.innerHTML = '';
-
-            DB.announcements.forEach(a => {
-                const hasLiked = a.likes.includes(DB.currentUser.username);
-                container.innerHTML += `
-                    <div class="bg-cyber-dark p-6 rounded-2xl border border-green-900/80 space-y-4 hover:border-green-400 transition">
-                        <div class="flex justify-between items-start border-b border-green-900/40 pb-3">
-                            <div>
-                                <h4 class="text-lg font-bold font-heading text-green-400">${a.title}</h4>
-                                <div class="text-xs text-gray-400 font-mono">Đăng bởi: <span class="text-white">${a.author}</span> | Ngày: ${a.date}</div>
-                            </div>
-                        </div>
-
-                        <!-- FULL UNTRUNCATED TEXT -->
-                        <div class="text-sm text-gray-200 leading-relaxed font-mono bg-black/40 p-4 rounded-xl border border-green-900/30">
-                            ${a.content}
-                        </div>
-
-                        <!-- TIM / LIKE BUTTON -->
-                        <div class="flex items-center justify-between pt-2">
-                            <button onclick="toggleLikeAnnouncement(${a.id})" class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-black border ${hasLiked ? 'border-red-500 text-red-400' : 'border-green-900 text-gray-400'} hover:scale-105 transition">
-                                <i data-lucide="heart" class="w-4 h-4 ${hasLiked ? 'fill-red-500 text-red-500' : ''}"></i>
-                                <span class="text-xs font-bold font-heading">${hasLiked ? 'ĐÃ THÍCH' : 'THẢ TIM'} (${a.likes.length})</span>
-                            </button>
-                            <span class="text-[10px] text-gray-500 font-mono">${a.likes.length} người trong Clan đã thả tim bài viết này</span>
-                        </div>
-                    </div>
-                `;
-            });
-            lucide.createIcons();
-        }
-
-        function toggleLikeAnnouncement(id) {
-            const ann = DB.announcements.find(x => x.id === id);
-            if (ann) {
-                const idx = ann.likes.indexOf(DB.currentUser.username);
-                if (idx > -1) {
-                    ann.likes.splice(idx, 1);
-                } else {
-                    ann.likes.push(DB.currentUser.username);
-                }
+        function processLogin() {
+            const u = document.getElementById('login-input-user').value.trim();
+            const p = document.getElementById('login-input-pass').value.trim();
+            const found = DB.users.find(x => (x.username === u || x.email === u) && x.pass === p);
+            if (found) {
+                DB.currentUser = found;
                 saveDB();
-                renderFullAnnouncements();
+                updateAuthUI();
+                closeModal('login-modal');
+                alert(`Xin chào ${found.displayName}!`);
+            } else {
+                alert('Tên đăng nhập hoặc mật khẩu không chính xác!');
             }
         }
 
-        // CHAT SYSTEM
-        function renderChatTab() {
-            renderChatUsers();
-            renderChatMessages();
-        }
-
-        function renderChatUsers() {
-            const container = document.getElementById('chat-users-list');
-            container.innerHTML = '';
-
-            const partners = DB.users.filter(u => u.username !== DB.currentUser.username);
-
-            partners.forEach(u => {
-                const isActive = u.username === DB.activeChatPartner;
-                container.innerHTML += `
-                    <div onclick="selectChatPartner('${u.username}')" class="p-2.5 rounded-xl border ${isActive ? 'border-green-400 bg-green-950/40' : 'border-green-900/30 bg-black/40'} cursor-pointer hover:border-green-400 transition flex items-center space-x-3">
-                        <img src="${u.avatar}" class="w-8 h-8 rounded-full border border-green-500 object-cover">
-                        <div class="flex-grow">
-                            <div class="text-xs font-bold font-heading ${isActive ? 'text-green-400' : 'text-gray-300'}">${u.displayName}</div>
-                            <div class="text-[10px] text-gray-500 font-mono">${u.role}</div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            const activeTarget = DB.users.find(u => u.username === DB.activeChatPartner);
-            if (activeTarget) {
-                document.getElementById('chat-target-name').innerText = activeTarget.displayName;
-                document.getElementById('chat-target-avatar').src = activeTarget.avatar;
-            }
-        }
-
-        function selectChatPartner(username) {
-            DB.activeChatPartner = username;
-            renderChatUsers();
-            renderChatMessages();
-        }
-
-        function renderChatMessages() {
-            const container = document.getElementById('chat-messages-container');
-            container.innerHTML = '';
-
-            const filteredMsgs = DB.directMessages.filter(
-                m => (m.from === DB.currentUser.username && m.to === DB.activeChatPartner) ||
-                     (m.from === DB.activeChatPartner && m.to === DB.currentUser.username)
-            );
-
-            filteredMsgs.forEach(m => {
-                const isMe = m.from === DB.currentUser.username;
-                container.innerHTML += `
-                    <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-                        <div class="max-w-[80%] p-3 rounded-2xl ${isMe ? 'bg-green-500 text-black font-semibold' : 'bg-green-950 border border-green-800 text-green-300'}">
-                            ${m.text}
-                        </div>
-                        <span class="text-[9px] text-gray-500 mt-1">${m.time}</span>
-                    </div>
-                `;
-            });
-
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendChatMessage() {
-            const input = document.getElementById('chat-input-text');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const now = new Date();
-            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-            DB.directMessages.push({
-                from: DB.currentUser.username,
-                to: DB.activeChatPartner,
-                text: text,
-                time: timeStr
-            });
-
-            input.value = '';
+        function logout() {
+            DB.currentUser = null;
             saveDB();
-            renderChatMessages();
+            updateAuthUI();
+            switchTab('home');
         }
+
+        function renderServices() {
+            const c = document.getElementById('all-services-container');
+            const fc = document.getElementById('featured-services-container');
+            c.innerHTML = ''; fc.innerHTML = '';
+            DB.services.forEach(s => {
+                c.innerHTML += `<div class="bg-cyber-dark border border-green-900/60 p-4 rounded-xl space-y-2"><h4 class="font-bold font-orbitron text-green-400">${s.name}</h4><p class="text-xs text-gray-400">${s.desc}</p><div class="text-sm font-mono text-white font-bold">${s.price.toLocaleString('vi-VN')} ₫</div></div>`;
+                fc.innerHTML += `<div class="bg-cyber-dark p-3 rounded-lg border border-green-900/40 font-mono text-xs"><div class="font-bold text-green-400">${s.name}</div><div class="text-white">${s.price.toLocaleString('vi-VN')} ₫</div></div>`;
+            });
+        }
+
+        function renderProfilePage() {
+            if (!DB.currentUser) return;
+            document.getElementById('profile-display-name').innerText = DB.currentUser.displayName;
+            document.getElementById('profile-username').innerText = DB.currentUser.username;
+            document.getElementById('profile-email').innerText = DB.currentUser.email;
+            document.getElementById('profile-role-badge').innerText = DB.currentUser.role;
+            document.getElementById('profile-member-code').innerText = DB.currentUser.code;
+            document.getElementById('profile-avatar').src = DB.currentUser.avatar;
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
         window.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            renderFullAnnouncements();
-            renderChatUsers();
+            updateAuthUI();
+            renderServices();
         });
     </script>
 </body>
